@@ -5,7 +5,7 @@ const CONTACT = {
   name: "Ananda Maulid",
   phone: "+62 895-2439-4626",
   phoneHref: "tel:+6289524394626",
-  email: "maulidart122@gmail.com",
+  email: "anandamaulids@gmail.com",
   site: "anandamaulid.vercel.app",
   siteHref: "https://anandamaulid.vercel.app",
 };
