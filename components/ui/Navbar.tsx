@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,11 +18,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [pill, setPill] = useState({ left: 0, width: 0, opacity: 0 });
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
-
+  // Efek untuk shadow navbar saat di-scroll
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
@@ -30,18 +27,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const activeEl = linkRefs.current[pathname];
-    const container = containerRef.current;
-    if (activeEl && container) {
-      const c = container.getBoundingClientRect();
-      const r = activeEl.getBoundingClientRect();
-      setPill({ left: r.left - c.left, width: r.width, opacity: 1 });
-    } else {
-      setPill((p) => ({ ...p, opacity: 0 }));
-    }
-  }, [pathname]);
-
+  // Tutup menu mobile otomatis tiap kali pindah halaman
   useEffect(() => setMobileOpen(false), [pathname]);
 
   return (
@@ -58,32 +44,35 @@ export default function Navbar() {
           A.M.
         </Link>
 
-        <nav ref={containerRef} className="relative hidden items-center gap-1 md:flex">
-          <motion.div
-            className="absolute top-1/2 h-9 -translate-y-1/2 rounded-full bg-text-primary/10"
-            animate={{ left: pill.left, width: pill.width, opacity: pill.opacity }}
-            transition={{ type: "spring", stiffness: 400, damping: 32 }}
-          />
+        {/* --- NAVBAR DESKTOP --- */}
+        <nav className="relative hidden items-center gap-1 md:flex">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                ref={(el) => {
-                  linkRefs.current[item.href] = el;
-                }}
                 className={cn(
-                  "relative z-10 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                  "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
                   isActive ? "text-text-primary" : "text-text-muted hover:text-text-secondary"
                 )}
               >
-                {item.label}
+                {/* Bayangan Pill pakai layoutId (Otomatis geser mulus) */}
+                {isActive && (
+                  <motion.div
+                    layoutId="active-nav-pill"
+                    className="absolute inset-0 z-0 rounded-full bg-text-primary/10"
+                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                  />
+                )}
+                {/* Teks link harus di atas shadow (z-10) */}
+                <span className="relative z-10">{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
+        {/* --- TOMBOL MENU MOBILE --- */}
         <button
           onClick={() => setMobileOpen(true)}
           className="mr-1 flex h-10 w-10 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-text-primary/5 md:hidden"
@@ -93,6 +82,7 @@ export default function Navbar() {
         </button>
       </header>
 
+      {/* --- DROPDOWN MENU MOBILE --- */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
