@@ -8,6 +8,20 @@
   --color-text-muted: #71717a;
   --color-border-hairline: #27272a;
   --color-border-subtle: #18181b;
+
+  /* --- PERBAIKAN ANIMASI MARQUEE (NGEBUT) --- */
+  --animate-marquee: marquee 15s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 18s linear infinite;
+
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-reverse {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0%); }
+  }
 }
 
 * {
