@@ -13,12 +13,14 @@ function MarqueeRow({
   const tripled = [...tools, ...tools, ...tools];
 
   return (
-    /* Increased top padding from pt-6 to pt-14 to create space for tooltips, preventing parent clipping */
-    <div className="relative flex overflow-hidden pb-6 pt-14">
+    /* PERBAIKAN: Hapus overflow-hidden di sini biar tooltip bebas melayang ke atas */
+    <div className="relative flex pb-6 pt-14">
       <div
         className={`flex shrink-0 items-center gap-10 md:gap-14 ${
           reverse ? "animate-marquee-reverse" : "animate-marquee"
         }`}
+        /* PERBAIKAN: Tembak durasi langsung di sini! Makin kecil detiknya, makin ngebut muternya */
+        style={{ animationDuration: "15s" }}
       >
         {tripled.map((tool, i) => (
           <div
@@ -61,7 +63,8 @@ function MarqueeRow({
 
 export default function TechMarquee() {
   return (
-    <section className="relative overflow-hidden py-14 md:py-20">
+    /* PERBAIKAN: Ubah overflow-hidden jadi overflow-x-hidden biar atas-bawah tetep lega */
+    <section className="relative overflow-x-hidden py-14 md:py-20">
       {/* Subtle top/bottom gradient borders */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
@@ -80,7 +83,8 @@ export default function TechMarquee() {
         </motion.div>
       </div>
 
-      <div className="mx-auto max-w-6xl overflow-hidden px-6 md:px-12">
+      {/* PERBAIKAN: Hapus overflow-hidden di container ini biar nggak nyekek tooltip */}
+      <div className="mx-auto max-w-6xl px-6 md:px-12">
         <MarqueeRow tools={webTools} />
         <div className="my-2" />
         <MarqueeRow tools={creativeTools} reverse />
