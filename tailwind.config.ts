@@ -55,8 +55,10 @@ const config: Config = {
         },
       },
       animation: {
-        marquee: "marquee 42s linear infinite",
-        "marquee-reverse": "marquee-reverse 48s linear infinite",
+        /* PERBAIKAN: Dicepetin dari 42s jadi 15s */
+        marquee: "marquee 15s linear infinite",
+        /* PERBAIKAN: Dicepetin dari 48s jadi 18s */
+        "marquee-reverse": "marquee-reverse 18s linear infinite",
         grain: "grain-shift 8s steps(10) infinite",
         "fade-in": "fade-in 0.8s ease-out forwards",
       },
